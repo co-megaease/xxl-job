@@ -34,6 +34,10 @@ public class XxlJobLog {
 	// alarm info
 	private int alarmStatus;
 
+	private int retryStatus;
+
+	private long nextRetryTime;
+
 	public long getId() {
 		return id;
 	}
@@ -154,4 +158,19 @@ public class XxlJobLog {
 		this.alarmStatus = alarmStatus;
 	}
 
+	public int getRetryStatus() {
+		return retryStatus;
+	}
+
+	public void setRetryStatus(int retryStatus) {
+		this.retryStatus = retryStatus;
+	}
+
+	public long getNextRetryTime() {
+		return nextRetryTime;
+	}
+
+	public void setNextRetryTime(long nextRetryTime) {
+		this.nextRetryTime = nextRetryTime;
+	}
 }

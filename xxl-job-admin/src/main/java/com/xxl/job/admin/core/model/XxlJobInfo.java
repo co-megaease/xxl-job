@@ -42,6 +42,12 @@ public class XxlJobInfo {
 	private long triggerLastTime;	// 上次调度时间
 	private long triggerNextTime;	// 下次调度时间
 
+	private int retryPeriod; //重试间隔
+
+	private Date startTime; //开始时间
+
+	private Date endTime; //停止时间
+
 
 	public int getId() {
 		return id;
@@ -233,5 +239,29 @@ public class XxlJobInfo {
 
 	public void setTriggerNextTime(long triggerNextTime) {
 		this.triggerNextTime = triggerNextTime;
+	}
+
+	public int getRetryPeriod() {
+		return retryPeriod;
+	}
+
+	public void setRetryPeriod(int retryPeriod) {
+		this.retryPeriod = retryPeriod;
+	}
+
+	public Date getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
+
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
 	}
 }
