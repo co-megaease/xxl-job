@@ -1,7 +1,11 @@
 package com.xxl.job.admin.controller;
 
 import com.xxl.job.admin.controller.annotation.PermissionLimit;
+import com.xxl.job.admin.controller.dto.RestfulTriggerParam;
 import com.xxl.job.admin.core.conf.XxlJobAdminConfig;
+import com.xxl.job.admin.core.model.XxlJobInfo;
+import com.xxl.job.admin.core.thread.JobTriggerPoolHelper;
+import com.xxl.job.admin.core.trigger.TriggerTypeEnum;
 import com.xxl.job.core.biz.AdminBiz;
 import com.xxl.job.core.biz.model.HandleCallbackParam;
 import com.xxl.job.core.biz.model.RegistryParam;
@@ -9,6 +13,7 @@ import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.util.GsonTool;
 import com.xxl.job.core.util.XxlJobRemotingUtil;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,6 +68,13 @@ public class JobApiController {
         } else if ("registryRemove".equals(uri)) {
             RegistryParam registryParam = GsonTool.fromJson(data, RegistryParam.class);
             return adminBiz.registryRemove(registryParam);
+        } else if ("trigger".equals(uri)) {
+            //
+            RestfulTriggerParam triggerParam = GsonTool.fromJson(data, RestfulTriggerParam.class);
+            String executorParam = StringUtils.hasText(triggerParam.getExecutorParam())?triggerParam.getExecutorParam():"";
+            String addressList = StringUtils.hasText(triggerParam.getAddressList())?triggerParam.getAddressList():"";
+            JobTriggerPoolHelper.trigger(triggerParam.getId(), TriggerTypeEnum.MANUAL, -1, null, executorParam, addressList);
+            return ReturnT.SUCCESS;
         } else {
             return new ReturnT<String>(ReturnT.FAIL_CODE, "invalid request, uri-mapping("+ uri +") not found.");
         }
