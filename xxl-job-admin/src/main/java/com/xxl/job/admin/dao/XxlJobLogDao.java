@@ -38,7 +38,9 @@ public interface XxlJobLogDao {
 	public int updateTriggerInfo(XxlJobLog xxlJobLog);
 
 	public int updateHandleInfo(XxlJobLog xxlJobLog);
-	
+
+	public int updateHandleMsg(@Param("logId") Long logId, @Param("handleMsg") String handleMsg, @Param("retryStatus") int retryStatus);
+
 	public int delete(@Param("jobId") int jobId);
 
 	public Map<String, Object> findLogReport(@Param("from") Date from,
@@ -53,9 +55,15 @@ public interface XxlJobLogDao {
 
 	public List<Long> findFailJobLogIds(@Param("pagesize") int pagesize);
 
+	List<XxlJobLog> findRetryJobLog(@Param("maxNextTime") long maxNextTime, @Param("pagesize") int pagesize);
+
 	public int updateAlarmStatus(@Param("logId") long logId,
 								 @Param("oldAlarmStatus") int oldAlarmStatus,
 								 @Param("newAlarmStatus") int newAlarmStatus);
+
+	public int updateRetryStatus(@Param("logId") long logId,
+								 @Param("oldRetryStatus") int oldRetryStatus,
+								 @Param("newRetryStatus") int newRetryStatus);
 
 	public List<Long> findLostJobIds(@Param("losedTime") Date losedTime);
 

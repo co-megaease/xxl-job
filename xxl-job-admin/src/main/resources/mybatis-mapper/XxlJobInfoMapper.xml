@@ -36,6 +36,11 @@
 		<result column="trigger_status" property="triggerStatus" />
 		<result column="trigger_last_time" property="triggerLastTime" />
 		<result column="trigger_next_time" property="triggerNextTime" />
+
+
+		<result column="retry_period" property="retryPeriod" />
+		<result column="start_time" property="startTime" />
+		<result column="end_time" property="endTime" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
@@ -62,7 +67,10 @@
 		t.child_jobid,
 		t.trigger_status,
 		t.trigger_last_time,
-		t.trigger_next_time
+		t.trigger_next_time,
+		t.retry_period,
+		t.start_time,
+		t.end_time
 	</sql>
 
 	<select id="pageList" parameterType="java.util.HashMap" resultMap="XxlJobInfo">
@@ -173,6 +181,15 @@
 		WHERE t.id = #{id}
 	</select>
 
+	<select id="loadByIdList" resultMap="XxlJobInfo">
+		SELECT <include refid="Base_Column_List" />
+		FROM xxl_job_info AS t
+		WHERE t.id in
+		<foreach collection="idList" item="item" open="(" close=")" separator="," >
+			#{item}
+		</foreach>
+	</select>
+
 	<update id="update" parameterType="com.xxl.job.admin.core.model.XxlJobInfo" >
 		UPDATE xxl_job_info
 		SET
@@ -224,6 +241,8 @@
 		FROM xxl_job_info AS t
 		WHERE t.trigger_status = 1
 			and t.trigger_next_time <![CDATA[ <= ]]> #{maxNextTime}
+			and t.trigger_next_time >= t.start_time
+			and t.trigger_next_time <![CDATA[ <= ]]> t.end_time
 		ORDER BY id ASC
 		LIMIT #{pagesize}
 	</select>
