@@ -24,6 +24,9 @@
 	    <result column="handle_msg" property="handleMsg" />
 
 		<result column="alarm_status" property="alarmStatus" />
+
+		<result column="retry_status" property="retryStatus" />
+		<result column="next_retry_time" property="nextRetryTime" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
@@ -41,7 +44,9 @@
 		t.handle_time,
 		t.handle_code,
 		t.handle_msg,
-		t.alarm_status
+		t.alarm_status,
+		t.retry_status,
+		t.next_retry_time
 	</sql>
 	
 	<select id="pageList" resultMap="XxlJobLog">
@@ -146,7 +151,8 @@
 			`executor_handler`=#{executorHandler},
 			`executor_param`= #{executorParam},
 			`executor_sharding_param`= #{executorShardingParam},
-			`executor_fail_retry_count`= #{executorFailRetryCount}
+			`executor_fail_retry_count`= #{executorFailRetryCount},
+			`next_retry_time`= #{nextRetryTime}
 		WHERE `id`= #{id}
 	</update>
 
@@ -239,11 +245,43 @@
 		LIMIT #{pagesize}
 	</select>
 
+	<select id="findRetryJobLog" parameterType="java.util.HashMap" resultMap="XxlJobLog" >
+			SELECT <include refid="Base_Column_List" />
+			FROM xxl_job_log AS t
+			WHERE
+				!(
+				(t.trigger_code in (0, 200) and t.handle_code = 0)
+				OR
+				(t.handle_code = 200)
+				)
+			and t.retry_status = 0
+			and t.executor_fail_retry_count > 0
+			and t.next_retry_time <![CDATA[ <= ]]> #{maxNextTime}
+			ORDER BY id ASC
+			LIMIT #{pagesize}
+	</select>
+
+
 	<update id="updateAlarmStatus" >
 		UPDATE xxl_job_log
 		SET
 			`alarm_status` = #{newAlarmStatus}
 		WHERE `id`= #{logId} AND `alarm_status` = #{oldAlarmStatus}
+	</update>
+
+
+	<update id="updateRetryStatus" >
+		UPDATE xxl_job_log
+		SET
+			`retry_status` = #{newRetryStatus}
+		WHERE `id`= #{logId} AND `retry_status` = #{oldRetryStatus}
+	</update>
+	<update id="updateHandleMsg">
+		UPDATE xxl_job_log
+		SET
+			`handle_msg`= CONCAT(`handle_msg`, #{handleMsg})
+			,`retry_status` = #{retryStatus}
+		WHERE `id`= #{logId}
 	</update>
 
 	<select id="findLostJobIds" resultType="long" >

@@ -205,7 +205,11 @@ public class XxlJobTrigger {
         jobLog.setExecutorParam(executorParam);
         jobLog.setExecutorShardingParam(shardingParam);
         jobLog.setExecutorFailRetryCount(finalFailRetryCount);
-        //jobLog.setTriggerTime();
+        jobLog.setRetryStatus(0);
+        long timestamp = System.currentTimeMillis();
+        if(finalFailRetryCount > 0) {
+            jobLog.setNextRetryTime(timestamp + jobInfo.getRetryPeriod() * 1000L);
+        }
         jobLog.setTriggerCode(triggerResult.getCode());
         jobLog.setTriggerMsg(triggerMsgSb.toString());
         XxlJobAdminConfig.getAdminConfig().getXxlJobLogDao().updateTriggerInfo(jobLog);

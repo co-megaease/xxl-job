@@ -44,9 +44,9 @@ public class XxlJobInfo {
 
 	private int retryPeriod; //重试间隔
 
-	private Date startTime; //开始时间
+	private Long startTime; //开始时间
 
-	private Date endTime; //停止时间
+	private Long endTime; //停止时间
 
 
 	public int getId() {
@@ -249,19 +249,19 @@ public class XxlJobInfo {
 		this.retryPeriod = retryPeriod;
 	}
 
-	public Date getStartTime() {
+	public Long getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(Date startTime) {
+	public void setStartTime(Long startTime) {
 		this.startTime = startTime;
 	}
 
-	public Date getEndTime() {
+	public Long getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(Date endTime) {
+	public void setEndTime(Long endTime) {
 		this.endTime = endTime;
 	}
 }
