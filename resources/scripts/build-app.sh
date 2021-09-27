@@ -7,7 +7,7 @@ SCRIPTPATH=$(pwd -P)
 popd > /dev/null
 
 do_package() {
-  cd /xxl-job-admin/
+  cd /xxl-job/
   mvn package -Dmaven.test.skip=true
 }
 
