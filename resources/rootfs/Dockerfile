@@ -14,11 +14,9 @@ COPY     pom.xml /xxl-job/pom.xml
 
 COPY     xxl-job-admin/pom.xml /xxl-job/xxl-job-admin/pom.xml
 COPY     xxl-job-admin/src /xxl-job/xxl-job-admin/src
-COPY     xxl-job-admin/resources /xxl-job/xxl-job-admin/resources
 
 COPY     xxl-job-core/pom.xml /xxl-job/xxl-job-core/pom.xml
 COPY     xxl-job-core/src /xxl-job/xxl-job-core/src
-COPY     xxl-job-core/resources /xxl-job/xxl-job-core/resources
 
 WORKDIR  /xxl-job
 
