@@ -236,13 +236,18 @@
 	</select>
 
 
+
 	<select id="scheduleJobQuery" parameterType="java.util.HashMap" resultMap="XxlJobInfo">
 		SELECT <include refid="Base_Column_List" />
 		FROM xxl_job_info AS t
 		WHERE t.trigger_status = 1
-			and t.trigger_next_time <![CDATA[ <= ]]> #{maxNextTime}
-			and t.trigger_next_time >= t.start_time
-			and t.trigger_next_time <![CDATA[ <= ]]> t.end_time
+		and t.trigger_next_time <![CDATA[ <= ]]> #{maxNextTime}
+		and (
+		    t.trigger_next_time = 0 or
+		    	( t.trigger_next_time >= t.start_time
+					and t.trigger_next_time <![CDATA[ <= ]]> t.end_time
+				)
+		    )
 		ORDER BY id ASC
 		LIMIT #{pagesize}
 	</select>
